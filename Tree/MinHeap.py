@@ -6,16 +6,17 @@ class MinHeap:
         self.__data.push(float("-inf"))
 
     def __len__(self):
-        return len(self.__data) - 1 if len(self.__data) != 0 else 0
+        return len(self.__data)
     
     def __getitem__(self, i):
         return self.__data[i]
     
     def __setitem__(self, i, value):
         self.__data[i] = value
-    
-    def __str__(self):
-        return str(self.__data)
+
+    def clear(self):
+        self.__data.clear()
+        self.__data.push(float("-inf"))
     
     @staticmethod
     def parent(value):
@@ -34,7 +35,7 @@ class MinHeap:
 
     def insert(self, value):
         self.__data.push(value)
-        current = len(self)
+        current = self.available()
         while self[current] < self[MinHeap.parent(current)]:
             self[current], self[MinHeap.parent(current)] =  self[MinHeap.parent(current)], self[current]
             current = MinHeap.parent(current)
@@ -48,12 +49,11 @@ class MinHeap:
                 else:
                     self[pos], self[MinHeap.rightChild(pos)] = self[MinHeap.rightChild(pos)], self[pos]
                     self.minHeapify(MinHeap.rightChild(pos))
-    
-    def Heapify(self):
-        for i in range(len(self) // 2, 0, -1):
-            self.minHeapify(i)
 
     def pop(self):
-        temp = self.__data.popAt(1)
-        self.minHeapify(len(self))
+        temp = self.__data.popSecondItem()
+        self.minHeapify(len(self) - 1)
         return temp
+
+    def available(self):
+        return len(self) - 1

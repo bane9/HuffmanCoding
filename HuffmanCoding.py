@@ -1,5 +1,4 @@
 from Tree.MinHeap import MinHeap
-import heapq
 
 class HeapNode:
     def __init__(self, data, freq):
@@ -9,11 +8,12 @@ class HeapNode:
         self.right = None
 
     def __lt__(self, other):
-        return self.freq < other.freq
+        if not isinstance(other, HeapNode): return False
+        else: return self.freq < other.freq
     
 class HuffmanCoding:
     def __init__(self):
-        self.__heap = []
+        self.__heap = MinHeap()
         self.__codes = {}
         self.__reverseMapping = {}
 
@@ -27,19 +27,19 @@ class HuffmanCoding:
             freq[x] = freq.get(x, 0) + 1
         
         for k, v in freq.items():
-            heapq.heappush(self.__heap, HeapNode(k, v))
+            self.__heap.insert(HeapNode(k, v))
 
-        while(len(self.__heap) > 1):
-            node1 = heapq.heappop(self.__heap)
-            node2 = heapq.heappop(self.__heap)
+        while(self.__heap.available() > 1):
+            node1 = self.__heap.pop()
+            node2 = self.__heap.pop()
 
             merged = HeapNode(None, node1.freq + node2.freq)
             merged.left = node1
             merged.right = node2
 
-            heapq.heappush(self.__heap, merged)
+            self.__heap.insert(merged)
     
-        root = heapq.heappop(self.__heap)
+        root = self.__heap.pop()
         self.__makeCodes(root, "")
 
     def __makeCodes(self, root, currentNode):
