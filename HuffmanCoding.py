@@ -29,7 +29,7 @@ class HuffmanCoding:
         for k, v in freq.items():
             self.__heap.insert(HeapNode(k, v))
 
-        while(self.__heap.available() > 1):
+        while(len(self.__heap) - 1 > 1):
             node1 = self.__heap.pop()
             node2 = self.__heap.pop()
 
@@ -38,9 +38,8 @@ class HuffmanCoding:
             merged.right = node2
 
             self.__heap.insert(merged)
-    
-        root = self.__heap.pop()
-        self.__makeCodes(root, "")
+
+        self.__makeCodes(self.__heap.pop(), "")
 
     def __makeCodes(self, root, currentNode):
         if root is None: return
@@ -85,8 +84,7 @@ class HuffmanCoding:
         padded = out[:8]
         additionalPadding = int(padded, 2)
 
-        out = out[8:] 
-        out = out[:-1 * additionalPadding]
+        out = out[8:][:-1 * additionalPadding]
 
         buff = ""
         decoded = ""

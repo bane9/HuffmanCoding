@@ -42,7 +42,7 @@ class List:
         temp = self.__head.nextNode
         pos = self.__size - 1
         if pos <= 0:
-            raise ValueError("Out of bounds")
+            raise ValueError("Out of range")
         if pos == 1:
             val = temp.data
             self.__head.nextNode = None
@@ -53,5 +53,3 @@ class List:
             self.__head.nextNode = self.__head.nextNode.nextNode
             self.__size = pos
             return val
-
-    
