@@ -41,18 +41,18 @@ class HuffmanCoding:
 
         self.__makeCodes(self.__heap.pop(), "")
 
-    def __makeCodes(self, root, currentNode):
-        if root is None: return
+    def __makeCodes(self, node, currentNode):
+        if node is None: return
 
-        if root.data is not None:
-            self.__codes[root.data] = currentNode
-            self.__reverseMapping[currentNode] = root.data
+        if node.data is not None:
+            self.__codes[node.data] = currentNode
+            self.__reverseMapping[currentNode] = node.data
             return
         
-        self.__makeCodes(root.left, currentNode + "0")
-        self.__makeCodes(root.right, currentNode + "1")
+        self.__makeCodes(node.left, currentNode + "0")
+        self.__makeCodes(node.right, currentNode + "1")
 
-    
+
     def __generateBinary(self, text):
         encoded = ""
 
@@ -63,13 +63,11 @@ class HuffmanCoding:
         for _ in range(padding):
             encoded += "0"
 
-        padded = "{0:08b}".format(padding)
-        encoded = padded + encoded
+        encoded = "{0:08b}".format(padding) + encoded
 
         out = bytearray()
         for i in range(0, len(encoded), 8):
-            byte = encoded[i:i+8]
-            out.append(int(byte, 2))
+            out.append(int(encoded[i:i+8], 2))
         return out
 
     def compress(self, text):
@@ -80,11 +78,8 @@ class HuffmanCoding:
         out = ""
         for x in bytearr:
             out += bin(x)[2:].rjust(8, '0')
-        
-        padded = out[:8]
-        additionalPadding = int(padded, 2)
 
-        out = out[8:][:-1 * additionalPadding]
+        out = out[8:-1 * int(out[:8], 2)]
 
         buff = ""
         decoded = ""
@@ -92,8 +87,7 @@ class HuffmanCoding:
         for x in out:
             buff += x
             if(buff in self.__reverseMapping):
-                c = self.__reverseMapping[buff]
-                decoded += c
+                decoded += self.__reverseMapping[buff]
                 buff = ""
 
         return decoded
